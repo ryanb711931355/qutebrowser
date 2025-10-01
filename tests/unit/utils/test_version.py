@@ -1105,6 +1105,7 @@ class TestWebEngineVersions:
         inferred = version.WebEngineVersions.from_webengine(
             qWebEngineVersion(), source="API")
         assert inferred.chromium_security == qWebEngineChromiumSecurityPatchVersion()
+        assert inferred.chromium_security is not None
 
 
 class FakeQSslSocket:
@@ -1278,6 +1279,7 @@ class TestChromiumVersion:
         versions = version.qtwebengine_versions(avoid_init=avoid_init)
         assert versions.source == 'override'
         assert versions.webengine == override
+        assert versions.chromium_security is not None
 
 
 @dataclasses.dataclass
@@ -1344,6 +1346,9 @@ def test_version_info(params, stubs, monkeypatch, config_stub):
             wrapper='QT WRAPPER',
             reason=machinery.SelectionReason.fake
         ),
+        'qutebrowser.qt.QtCore.Qt.Key': type(
+            'QtKey', (), {'Keyboard': 'KEYBOARD'}
+        )(),
     }
 
     version.opengl_info.cache_clear()
@@ -1472,6 +1477,7 @@ class TestOpenGLInfo:
         assert info.version_str == '3.0 Messiah 20.0'
         assert info.version == (3, 0)
         assert info.vendor_specific == 'Messiah 20.0'
+        assert info.chromium_security is not None
 
     @pytest.mark.parametrize('version_str, reason', [
         ('blah', 'missing space'),

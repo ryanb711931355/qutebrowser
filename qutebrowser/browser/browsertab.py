@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 from qutebrowser.keyinput import modeman
 from qutebrowser.config import config, websettings
 from qutebrowser.utils import (utils, objreg, usertypes, log, qtutils,
-                               urlutils, message, jinja, version)
+                               urlutils, message, jinja)
 from qutebrowser.misc import miscwidgets, objects, sessions
 from qutebrowser.browser import eventfilter, inspector
 from qutebrowser.qt import sip
@@ -487,6 +487,9 @@ class AbstractZoom(QObject):
         if fuzzyval:
             self._neighborlist.fuzzyval = int(factor * 100)
         if factor < 0:
+            raise ValueError("Can't zoom to factor {}!".format(factor))
+        max_zoom = float(config.val.zoom.max) / 100
+        if factor > max_zoom:
             raise ValueError("Can't zoom to factor {}!".format(factor))
 
         default_zoom_factor = float(config.val.zoom.default) / 100

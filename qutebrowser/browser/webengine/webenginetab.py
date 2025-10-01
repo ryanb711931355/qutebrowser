@@ -1154,7 +1154,7 @@ class _WebEngineScripts(QObject):
 
             try:
                 world = int(script.jsworld)
-                if not 0 <= world <= qtutils.MAX_WORLD_ID:
+                if not (0 <= world and world <= qtutils.MAX_WORLD_ID):
                     log.greasemonkey.error(
                         f"script {script.name} has invalid value for '@qute-js-world'"
                         f": {script.jsworld}, should be between 0 and "
@@ -1629,8 +1629,8 @@ class WebEngineTab(browsertab.AbstractTab):
             (navigation.navigation_type ==
                 usertypes.NavigationRequest.Type.link_clicked) and
             navigation.is_main_frame and
-            (utils.VersionNumber(6, 2) <= qtwe_ver < utils.VersionNumber(6, 2, 5) or
-             utils.VersionNumber(6, 3) <= qtwe_ver < utils.VersionNumber(6, 3, 1))
+            (utils.VersionNumber(6, 2) <= qtwe_ver and qtwe_ver < utils.VersionNumber(6, 2, 5) or
+             utils.VersionNumber(6, 3) <= qtwe_ver and qtwe_ver < utils.VersionNumber(6, 3, 1))
         ):
             log.webview.debug(
                 "Working around blocked request from local page "
